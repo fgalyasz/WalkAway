@@ -6,6 +6,7 @@ protocol StatusItemActions: AnyObject {
     func lockNow()
     func openPreferences()
     func openAbout()
+    func checkForUpdates()
     func quitApp()
 }
 
@@ -36,6 +37,7 @@ final class StatusItemController: NSObject {
     @objc func handleLockNow() { actions?.lockNow() }
     @objc func handlePreferences() { actions?.openPreferences() }
     @objc func handleAbout() { actions?.openAbout() }
+    @objc func handleCheckForUpdates() { actions?.checkForUpdates() }
     @objc func handleQuit() { actions?.quitApp() }
 }
 
@@ -53,16 +55,25 @@ private extension StatusItemController {
     }
 
     func finishMenu() {
+        addStatusItems()
+        addActionItems()
+        addQuitItem()
+        statusItem.menu = menu
+        statusItem.button?.toolTip = "WalkAway"
+    }
+
+    func addStatusItems() {
         menu.addItem(statusLine)
         menu.addItem(armItem)
         menu.addItem(actionItem("Lock Now", #selector(handleLockNow)))
         menu.addItem(.separator())
+    }
+
+    func addActionItems() {
         menu.addItem(actionItem("Preferences…", #selector(handlePreferences)))
+        menu.addItem(actionItem(UpdateMenuCopy.checkForUpdates, #selector(handleCheckForUpdates)))
         menu.addItem(actionItem("About WalkAway", #selector(handleAbout)))
         menu.addItem(.separator())
-        addQuitItem()
-        statusItem.menu = menu
-        statusItem.button?.toolTip = "WalkAway"
     }
 
     func addQuitItem() {

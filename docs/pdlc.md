@@ -23,7 +23,7 @@ Every **new product feature** and every **user-visible bugfix** follows this pat
 5. **Dev** — English names, existing Swift style, no TCC.db writes, no auto-enable of Privacy switches.
 6. **Unit tests** — New Core logic ≥95% of the new types. Positive and negative. No timing-sensitive asserts. `swift test` must pass.
 7. **Review** — Diff vs FR consequences. If the diff is large, security-sensitive, or Ferenc asks, run `bmad-code-review`. Fix blockers before build.
-8. **Changelog + website** — `CHANGELOG.md` first. User-facing copy when the site must explain the change. Then `./build_dmg.sh --patch` (or `--minor` / `--major`) once that script exists.
+8. **Changelog + website** — `CHANGELOG.md` first. User-facing copy when the site must explain the change. Then `./build_dmg.sh --patch` (or `--minor` / `--major`). The build writes `docs/version.txt`, `docs/appcast.xml`, `docs/downloads/`, then deploys [tenprintsoftware.com](https://tenprintsoftware.com) via `scripts/deploy_site.sh`.
 9. **Commit + push** — One release commit after tests (and DMG when the release path exists). Push `origin HEAD`. Close the GitHub stories and epic. Set those Project items to `Done`.
 
 ## Do not

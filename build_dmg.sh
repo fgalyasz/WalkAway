@@ -42,6 +42,9 @@ printf '%s' "${app_version}" > "${project_root}/docs/version.txt"
 echo "[build_dmg] Version ${current_version} -> ${app_version}" >&2
 
 build_number="$(git -C "${project_root}" rev-list --count HEAD 2>/dev/null || echo 1)"
+if [[ -n "${bump_level}" ]]; then
+  build_number=$((build_number + 1))
+fi
 build_dir="${project_root}/.build"
 dist_dir="${project_root}/dist"
 staging_dir="${dist_dir}/staging"
@@ -58,6 +61,19 @@ swift build -c release --package-path "${project_root}"
 binary_path="${build_dir}/release/${executable_name}"
 cp "${binary_path}" "${macos_dir}/${executable_name}"
 chmod +x "${macos_dir}/${executable_name}"
+
+# shellcheck source=scripts/sparkle_bundle.sh
+source "${project_root}/scripts/sparkle_bundle.sh"
+sparkle_framework="$(find_sparkle_framework "${build_dir}/release")"
+embed_sparkle_framework "${sparkle_framework}" "${app_dir}" "${macos_dir}/${executable_name}"
+"${project_root}/scripts/ensure_sparkle_keys.sh"
+sparkle_public_key_file="${project_root}/scripts/sparkle_public_ed_key.txt"
+sparkle_public_ed_key="$(tr -d ' \t\n\r' < "${sparkle_public_key_file}")"
+if [[ -z "${sparkle_public_ed_key}" ]]; then
+  echo "ERROR: Sparkle public key file is empty" >&2
+  exit 1
+fi
+
 cp "${version_file}" "${resources_dir}/VERSION"
 if [[ -f "${project_root}/Assets/AppIcon.icns" ]]; then
   cp "${project_root}/Assets/AppIcon.icns" "${resources_dir}/AppIcon.icns"
@@ -102,6 +118,14 @@ cat > "${contents_dir}/Info.plist" <<EOF
   <string>WalkAway uses Bluetooth to measure the signal of your Apple Watch or iPhone so it can lock the screen when you walk away.</string>
   <key>NSAppleEventsUsageDescription</key>
   <string>WalkAway locks the screen through System Events. It does not sleep the Mac.</string>
+  <key>SUFeedURL</key>
+  <string>https://tenprintsoftware.com/downloads/walkaway/appcast.xml</string>
+  <key>SUPublicEDKey</key>
+  <string>${sparkle_public_ed_key}</string>
+  <key>SUEnableAutomaticChecks</key>
+  <true/>
+  <key>SUAutomaticallyUpdate</key>
+  <false/>
 </dict>
 </plist>
 EOF
@@ -163,4 +187,37 @@ rm -f "${tmp_rw_dmg}"
 downloads_dir="${project_root}/docs/downloads"
 mkdir -p "${downloads_dir}"
 cp -f "${dmg_path}" "${downloads_dir}/$(basename "${dmg_path}")"
+
+zip_path="${downloads_dir}/${package_name}-${app_version}.zip"
+rm -f "${zip_path}"
+ditto -c -k --keepParent "${app_dir}" "${zip_path}"
+
+sparkle_bin="$(find_sparkle_bin "${project_root}")"
+sparkle_account="${SPARKLE_ACCOUNT:-walkaway}"
+sparkle_key_file="${SPARKLE_ED_KEY_FILE:-${HOME}/.config/walkaway/sparkle_eddsa}"
+if [[ -f "${sparkle_key_file}" ]]; then
+  sign_output="$("${sparkle_bin}/sign_update" --account "${sparkle_account}" --ed-key-file "${sparkle_key_file}" "${zip_path}")"
+else
+  echo "[build_dmg] Signing update with Keychain account ${sparkle_account}" >&2
+  sign_output="$("${sparkle_bin}/sign_update" --account "${sparkle_account}" "${zip_path}")"
+fi
+sparkle_signature="$(printf '%s' "${sign_output}" | sed -n 's/.*edSignature="\([^"]*\)".*/\1/p')"
+if [[ -z "${sparkle_signature}" ]]; then
+  sparkle_signature="$(printf '%s' "${sign_output}" | tr -d ' \t\n\r')"
+fi
+if [[ -z "${sparkle_signature}" ]]; then
+  echo "ERROR: sign_update did not print an EdDSA signature" >&2
+  exit 1
+fi
+zip_length="$(stat -f '%z' "${zip_path}")"
+python3 "${project_root}/scripts/write_appcast.py" \
+  --version "${app_version}" \
+  --build "${build_number}" \
+  --length "${zip_length}" \
+  --signature "${sparkle_signature}" \
+  --output "${project_root}/docs/appcast.xml"
+
 echo "OK: DMG created at ${dmg_path}"
+echo "OK: Update zip copied to ${zip_path}"
+echo "OK: Appcast written to ${project_root}/docs/appcast.xml"
+"${project_root}/scripts/deploy_site.sh"

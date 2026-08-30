@@ -10,6 +10,7 @@ final class ApplicationController: NSObject, StatusItemActions, PreferencesHost,
     private var status: StatusItemController?
     private var preferences: PreferencesWindowController?
     private let about = AboutWindowController()
+    private let sparkleUpdateService = SparkleUpdateService()
 
     override init() {
         settingsURL = defaultSettingsURL()
@@ -26,6 +27,7 @@ final class ApplicationController: NSObject, StatusItemActions, PreferencesHost,
         ble.start()
         loop.start { [weak self] in self?.tick() }
         applyLaunchAtLogin(desired: settings.launchAtLogin)
+        sparkleUpdateService.start()
     }
 
     func toggleArm() {
@@ -45,6 +47,10 @@ final class ApplicationController: NSObject, StatusItemActions, PreferencesHost,
 
     func openAbout() {
         about.show()
+    }
+
+    func checkForUpdates() {
+        sparkleUpdateService.checkForUpdates()
     }
 
     func quitApp() {
