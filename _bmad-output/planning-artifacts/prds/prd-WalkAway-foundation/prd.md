@@ -3,7 +3,7 @@ title: WalkAway foundation
 status: final
 created: 2026-08-31
 updated: 2026-08-31
-parent_issue: pending
+parent_issue: https://github.com/fgalyasz/WalkAway/issues/1
 ---
 
 # PRD: WalkAway foundation
