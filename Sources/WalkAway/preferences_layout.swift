@@ -63,10 +63,16 @@ extension PreferencesViewController {
             launchCheckbox.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             launchHint.topAnchor.constraint(equalTo: launchCheckbox.bottomAnchor, constant: 6),
             launchHint.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            launchHint.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            launchHint.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+        ] + privacyConstraints()
+    }
+
+    func privacyConstraints() -> [NSLayoutConstraint] {
+        [
             privacyHint.topAnchor.constraint(equalTo: launchHint.bottomAnchor, constant: 12),
             privacyHint.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            privacyHint.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            privacyHint.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            privacyHint.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor, constant: -20)
         ]
     }
 }

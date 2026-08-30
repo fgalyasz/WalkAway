@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2 — 2026-08-31
+
+- Preferences… and About WalkAway open a visible window from the menu bar (accessory apps need a brief regular activation).
+
 ## 0.1.1 — 2026-08-31
 
 - Check for Updates… in the menu. Installed copies query tenprintsoftware.com and can install a newer build.

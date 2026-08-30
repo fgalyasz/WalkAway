@@ -7,23 +7,37 @@ protocol PreferencesHost: AnyObject {
     func writeSettings(_ settings: WalkAwaySettings)
 }
 
-final class PreferencesWindowController: NSWindowController {
+final class PreferencesWindowController: NSWindowController, NSWindowDelegate {
     let preferencesViewController: PreferencesViewController
 
     init(host: PreferencesHost) {
         preferencesViewController = PreferencesViewController(host: host)
-        super.init(window: nil)
-        window = makePreferencesWindow(preferencesViewController)
+        super.init(window: makePreferencesWindow(preferencesViewController))
+        window?.delegate = self
+        window?.isReleasedWhenClosed = false
     }
 
     required init?(coder: NSCoder) { nil }
 
     func show() {
+        PanelActivation.begin()
         preferencesViewController.reloadFromHost()
+        perform(#selector(presentWindow), with: nil, afterDelay: 0)
+    }
+
+    @objc func presentWindow() {
         guard let window else { return }
         window.center()
         window.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
+    }
+
+    func windowWillClose(_ notification: Notification) {
+        perform(#selector(endPanelIfNeeded), with: nil, afterDelay: 0)
+    }
+
+    @objc func endPanelIfNeeded() {
+        PanelActivation.endIfNoKeyWindow()
     }
 }
 
