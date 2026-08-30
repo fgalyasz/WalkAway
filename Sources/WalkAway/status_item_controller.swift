@@ -4,6 +4,8 @@ import WalkAwayCore
 protocol StatusItemActions: AnyObject {
     func toggleArm()
     func lockNow()
+    func openPreferences()
+    func openAbout()
     func quitApp()
 }
 
@@ -23,23 +25,18 @@ final class StatusItemController: NSObject {
         buildMenu()
     }
 
-    func apply(settings: WalkAwaySettings) {
-        statusLine.title = statusTitle(settings)
+    func apply(settings: WalkAwaySettings, adapter: BleAdapterStatus) {
+        statusLine.title = menuStatusTitle(settings: settings, adapter: adapter)
         armItem.title = settings.armed ? "Disarm" : "Arm"
         armItem.isEnabled = settings.trustedDeviceId != nil
         statusItem.button?.image = menuImage(armed: settings.armed)
     }
 
     @objc func handleToggleArm() { actions?.toggleArm() }
-
     @objc func handleLockNow() { actions?.lockNow() }
-
+    @objc func handlePreferences() { actions?.openPreferences() }
+    @objc func handleAbout() { actions?.openAbout() }
     @objc func handleQuit() { actions?.quitApp() }
-}
-
-private func statusTitle(_ settings: WalkAwaySettings) -> String {
-    if settings.trustedDeviceId == nil { return "No trusted device" }
-    return settings.armed ? "Armed" : "Disarmed"
 }
 
 private func menuImage(armed: Bool) -> NSImage? {
@@ -52,20 +49,31 @@ private extension StatusItemController {
         statusLine.isEnabled = false
         armItem.action = #selector(handleToggleArm)
         armItem.target = self
-        let lockItem = NSMenuItem(title: "Lock Now", action: #selector(handleLockNow), keyEquivalent: "")
-        lockItem.target = self
-        finishMenu(lockItem: lockItem)
+        finishMenu()
     }
 
-    func finishMenu(lockItem: NSMenuItem) {
-        let quitItem = NSMenuItem(title: "Quit WalkAway", action: #selector(handleQuit), keyEquivalent: "q")
-        quitItem.target = self
+    func finishMenu() {
         menu.addItem(statusLine)
         menu.addItem(armItem)
-        menu.addItem(lockItem)
+        menu.addItem(actionItem("Lock Now", #selector(handleLockNow)))
         menu.addItem(.separator())
-        menu.addItem(quitItem)
+        menu.addItem(actionItem("Preferences…", #selector(handlePreferences)))
+        menu.addItem(actionItem("About WalkAway", #selector(handleAbout)))
+        menu.addItem(.separator())
+        addQuitItem()
         statusItem.menu = menu
         statusItem.button?.toolTip = "WalkAway"
+    }
+
+    func addQuitItem() {
+        let quitItem = actionItem("Quit WalkAway", #selector(handleQuit))
+        quitItem.keyEquivalent = "q"
+        menu.addItem(quitItem)
+    }
+
+    func actionItem(_ title: String, _ selector: Selector) -> NSMenuItem {
+        let item = NSMenuItem(title: title, action: selector, keyEquivalent: "")
+        item.target = self
+        return item
     }
 }

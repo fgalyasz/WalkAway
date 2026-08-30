@@ -26,6 +26,10 @@ Production calls System Events `lock screen` (or Control-Command-Q). Injected `L
 
 CoreBluetooth scan, duplicates on, moving RSSI average (window 5). iPhone random addresses may drop; Watch and AirPods are the reliable picks. Document that in Preferences copy.
 
+Bluetooth off, unauthorized, or unavailable: do not evaluate presence. Do not lock from adapter state.
+
+Lost advertisements while powered on still count as away after `rssiStaleInterval` (3s).
+
 ## Persistence
 
 JSON at `~/Library/Application Support/WalkAway/settings.json`.

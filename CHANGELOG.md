@@ -2,5 +2,7 @@
 
 ## 0.1.0 — 2026-08-31
 
-- Start WalkAway: menu bar shell, Core presence policy, settings store.
-- Lock screen, do not sleep. No auto-unlock. No password stored.
+- Menu bar app: Armed/Disarmed, Lock Now, Preferences, About.
+- Trusted BLE device (Apple Watch or iPhone), RSSI threshold, away delay, lock once per absence.
+- Lock the screen, do not sleep. No auto-unlock. No password stored.
+- Launch at Login via SMAppService. Off by default.

@@ -62,7 +62,6 @@ public struct PresenceTracker: Equatable {
     }
 
     private func secondsAway(now: Date) -> Int {
-        guard let awaySince else { return 0 }
-        return Int(now.timeIntervalSince(awaySince))
+        Int(now.timeIntervalSince(awaySince ?? now))
     }
 }

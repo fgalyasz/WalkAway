@@ -1,0 +1,43 @@
+import XCTest
+@testable import WalkAwayCore
+
+final class DiscoveredDeviceTests: XCTestCase {
+    func testTitleWithRssi() {
+        let device = DiscoveredDevice(id: "a", name: "Watch", rssi: -62)
+        XCTAssertEqual(deviceMenuTitle(device), "Watch (-62 dBm)")
+    }
+
+    func testTitleWithoutRssi() {
+        let device = DiscoveredDevice(id: "a", name: "Watch", rssi: nil)
+        XCTAssertEqual(deviceMenuTitle(device), "Watch (not in range)")
+    }
+
+    func testIncludesTrustedWhenMissing() {
+        let settings = settingsWithDevice(.default, deviceId: "watch", deviceName: "Anna Watch")
+        let listed = devicesIncludingTrusted([], settings: settings)
+        XCTAssertEqual(listed.count, 1)
+        XCTAssertEqual(listed[0].id, "watch")
+        XCTAssertNil(listed[0].rssi)
+    }
+
+    func testPlaceholderWithoutName() {
+        var settings = WalkAwaySettings.default
+        settings.trustedDeviceId = "watch"
+        settings.trustedDeviceName = nil
+        let listed = devicesIncludingTrusted([], settings: settings)
+        XCTAssertEqual(listed[0].name, "Trusted device")
+    }
+
+    func testDoesNotDuplicateTrusted() {
+        let settings = settingsWithDevice(.default, deviceId: "watch", deviceName: "Anna Watch")
+        let current = DiscoveredDevice(id: "watch", name: "Anna Watch", rssi: -50)
+        let listed = devicesIncludingTrusted([current], settings: settings)
+        XCTAssertEqual(listed.count, 1)
+        XCTAssertEqual(listed[0].rssi, -50)
+    }
+
+    func testNoDeviceLeavesListUnchanged() {
+        let current = DiscoveredDevice(id: "x", name: "Phone", rssi: -40)
+        XCTAssertEqual(devicesIncludingTrusted([current], settings: .default), [current])
+    }
+}

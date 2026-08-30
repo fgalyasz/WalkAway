@@ -5,3 +5,4 @@
 *.dmg
 .env
 .env.local
+/Assets/AppIcon.iconset

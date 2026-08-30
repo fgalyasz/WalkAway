@@ -11,13 +11,14 @@ macOS can unlock with Apple Watch. It does not lock when you leave. WalkAway fil
 
 ## Status
 
-Foundation increment. Core lock policy is implemented and tested. BLE device picker and Preferences ship in the remaining stories.
+Foundation increment shipped. Pick a Watch in Preferences, leave Armed on, walk away. The screen locks; encodes keep running.
 
 ## Development
 
 ```
 swift test
 swift run WalkAway
+./build_dmg.sh
 ```
 
 Product work follows [docs/pdlc.md](docs/pdlc.md).

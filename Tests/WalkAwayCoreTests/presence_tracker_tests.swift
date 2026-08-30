@@ -58,6 +58,13 @@ final class PresenceTrackerTests: XCTestCase {
         XCTAssertEqual(action, .none)
     }
 
+    func testUnknownBeforeSampleDoesNotLock() {
+        var tracker = PresenceTracker()
+        let action = tracker.evaluate(settings: armedSettings(), rssi: nil, now: start.addingTimeInterval(30))
+        XCTAssertEqual(action, .none)
+        XCTAssertNil(tracker.awaySince)
+    }
+
     func testEvaluateNeverUnlocks() {
         var tracker = PresenceTracker()
         _ = tick(&tracker, rssi: -40, after: 0)

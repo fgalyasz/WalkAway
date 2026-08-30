@@ -1,6 +1,6 @@
 ---
 title: WalkAway foundation
-status: ready-for-dev
+status: shipped
 created: 2026-08-31
 prd: _bmad-output/planning-artifacts/prds/prd-WalkAway-foundation/prd.md
 ---
