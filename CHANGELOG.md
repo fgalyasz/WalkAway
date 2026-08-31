@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.6 — 2026-08-31
+
+- Preferences… opens Preferences, and About WalkAway opens About, on that click. Earlier builds could open the previous menu item’s window.
+
 ## 0.1.5 — 2026-08-31
 
 - WalkAway stays in the menu bar after launch. Bluetooth discovery no longer crashes the app while Preferences is still closed.
