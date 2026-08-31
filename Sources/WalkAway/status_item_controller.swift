@@ -1,6 +1,13 @@
 import AppKit
 import WalkAwayCore
 
+enum PendingPanel {
+    case none
+    case preferences
+    case about
+    case updates
+}
+
 protocol StatusItemActions: AnyObject {
     func toggleArm()
     func lockNow()
@@ -10,11 +17,12 @@ protocol StatusItemActions: AnyObject {
     func quitApp()
 }
 
-final class StatusItemController: NSObject {
+final class StatusItemController: NSObject, NSMenuDelegate {
     private let statusItem: NSStatusItem
     private let menu: NSMenu
     private let statusLine: NSMenuItem
     private let armItem: NSMenuItem
+    private var pendingPanel: PendingPanel = .none
     weak var actions: StatusItemActions?
 
     override init() {
@@ -35,10 +43,24 @@ final class StatusItemController: NSObject {
 
     @objc func handleToggleArm() { actions?.toggleArm() }
     @objc func handleLockNow() { actions?.lockNow() }
-    @objc func handlePreferences() { actions?.openPreferences() }
-    @objc func handleAbout() { actions?.openAbout() }
-    @objc func handleCheckForUpdates() { actions?.checkForUpdates() }
+    @objc func handlePreferences() { pendingPanel = .preferences }
+    @objc func handleAbout() { pendingPanel = .about }
+    @objc func handleCheckForUpdates() { pendingPanel = .updates }
     @objc func handleQuit() { actions?.quitApp() }
+
+    func menuDidClose(_ menu: NSMenu) {
+        openPendingPanel()
+    }
+
+    func openPendingPanel() {
+        switch pendingPanel {
+        case .none: break
+        case .preferences: actions?.openPreferences()
+        case .about: actions?.openAbout()
+        case .updates: actions?.checkForUpdates()
+        }
+        pendingPanel = .none
+    }
 }
 
 private func menuImage(armed: Bool) -> NSImage? {
@@ -51,6 +73,7 @@ private extension StatusItemController {
         statusLine.isEnabled = false
         armItem.action = #selector(handleToggleArm)
         armItem.target = self
+        menu.delegate = self
         finishMenu()
     }
 

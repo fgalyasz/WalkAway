@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.4 — 2026-08-31
+
+- Preferences and About open on the screen under the pointer. The previous builds could put the window on a display that is not visible.
+
 ## 0.1.3 — 2026-08-31
 
 - Preferences… and About WalkAway now come to the front: wait for regular activation, then order the window front regardless of the status menu.

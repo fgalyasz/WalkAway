@@ -24,10 +24,10 @@ final class AboutWindowController: NSWindowController, NSWindowDelegate {
 }
 
 func makeAboutWindow() -> NSWindow {
-    let window = NSWindow(contentViewController: AboutViewController())
+    let rect = NSRect(x: 0, y: 0, width: 420, height: 220)
+    let window = NSWindow(contentRect: rect, styleMask: [.titled, .closable], backing: .buffered, defer: false)
     window.title = "About WalkAway"
-    window.styleMask = [.titled, .closable]
     window.isReleasedWhenClosed = false
-    window.setContentSize(NSSize(width: 420, height: 220))
+    window.contentViewController = AboutViewController()
     return window
 }

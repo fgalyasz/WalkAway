@@ -9,20 +9,27 @@ final class PanelActivation: NSObject {
         pending = window
         NSApp.setActivationPolicy(.regular)
         NSObject.cancelPreviousPerformRequests(withTarget: self)
-        perform(#selector(orderPendingFront), with: nil, afterDelay: 0.25)
+        perform(#selector(orderPendingFront), with: nil, afterDelay: 0.05)
     }
 
     @objc func orderPendingFront() {
         guard let window = pending else { return }
-        prepare(window)
+        placeOnActiveScreen(window)
         NSApp.activate(ignoringOtherApps: true)
         window.orderFrontRegardless()
         window.makeKeyAndOrderFront(nil)
     }
 
-    func prepare(_ window: NSWindow) {
-        window.collectionBehavior.insert(.moveToActiveSpace)
-        window.center()
+    func placeOnActiveScreen(_ window: NSWindow) {
+        let screen = screenUnderPointer() ?? NSScreen.main ?? NSScreen.screens.first
+        guard let screen else { return }
+        let frame = PanelPlacement.centeredFrame(visibleFrame: screen.visibleFrame, size: window.frame.size)
+        window.setFrame(frame, display: true)
+    }
+
+    func screenUnderPointer() -> NSScreen? {
+        let point = NSEvent.mouseLocation
+        return NSScreen.screens.first { NSMouseInRect(point, $0.frame, false) }
     }
 
     func endIfNoKeyWindow() {

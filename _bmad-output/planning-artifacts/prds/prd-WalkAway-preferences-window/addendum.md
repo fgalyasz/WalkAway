@@ -8,4 +8,4 @@ Mechanism for implementers. FR IDs refer to `prd.md`.
 
 ## Fix
 
-`PanelActivationPolicy` in Core decides regular vs accessory from the visible keyable window count. `PanelActivation` switches to `.regular`, waits 0.25s, then `orderFrontRegardless()` + `makeKeyAndOrderFront`. Status-menu clicks must not activate the app in the same turn. Closing the last normal panel returns to `.accessory`.
+`PanelActivationPolicy` in Core decides regular vs accessory from the visible keyable window count. `PanelPlacement` centers the frame on the pointer’s screen. `PanelActivation` switches to `.regular`, then `orderFrontRegardless()`. Status menu items set a pending action; `menuDidClose` opens the panel.

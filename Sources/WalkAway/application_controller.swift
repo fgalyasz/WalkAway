@@ -18,6 +18,7 @@ final class ApplicationController: NSObject, StatusItemActions, PreferencesHost,
         lockPort = SystemLockPort()
         super.init()
         settings.launchAtLogin = syncedLaunchAtLogin(stored: settings.launchAtLogin)
+        preferences = PreferencesWindowController(host: self)
     }
 
     func start() {
@@ -41,7 +42,6 @@ final class ApplicationController: NSObject, StatusItemActions, PreferencesHost,
     }
 
     func openPreferences() {
-        if preferences == nil { preferences = PreferencesWindowController(host: self) }
         preferences?.show()
     }
 

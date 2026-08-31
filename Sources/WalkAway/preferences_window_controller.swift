@@ -36,10 +36,10 @@ final class PreferencesWindowController: NSWindowController, NSWindowDelegate {
 }
 
 func makePreferencesWindow(_ content: NSViewController) -> NSWindow {
-    let window = NSWindow(contentViewController: content)
+    let rect = NSRect(x: 0, y: 0, width: 480, height: 430)
+    let window = NSWindow(contentRect: rect, styleMask: [.titled, .closable], backing: .buffered, defer: false)
     window.title = "Preferences"
-    window.styleMask = [.titled, .closable]
     window.isReleasedWhenClosed = false
-    window.setContentSize(NSSize(width: 480, height: 430))
+    window.contentViewController = content
     return window
 }
