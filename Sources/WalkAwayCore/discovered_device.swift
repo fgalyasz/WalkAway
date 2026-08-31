@@ -17,6 +17,18 @@ public func deviceMenuTitle(_ device: DiscoveredDevice) -> String {
     return "\(device.name) (\(rssi) dBm)"
 }
 
+public struct DeviceMenuRow: Equatable {
+    public let id: String
+    public let title: String
+}
+
+public func deviceMenuRows(
+    _ devices: [DiscoveredDevice],
+    settings: WalkAwaySettings
+) -> [DeviceMenuRow] {
+    devicesIncludingTrusted(devices, settings: settings).map(rowForDevice)
+}
+
 public func devicesIncludingTrusted(
     _ devices: [DiscoveredDevice],
     settings: WalkAwaySettings
@@ -24,6 +36,10 @@ public func devicesIncludingTrusted(
     guard let id = settings.trustedDeviceId else { return devices }
     if devices.contains(where: { $0.id == id }) { return devices }
     return [placeholderDevice(id: id, name: settings.trustedDeviceName)] + devices
+}
+
+func rowForDevice(_ device: DiscoveredDevice) -> DeviceMenuRow {
+    DeviceMenuRow(id: device.id, title: deviceMenuTitle(device))
 }
 
 func placeholderDevice(id: String, name: String?) -> DiscoveredDevice {

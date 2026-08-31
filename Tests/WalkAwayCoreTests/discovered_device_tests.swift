@@ -40,4 +40,29 @@ final class DiscoveredDeviceTests: XCTestCase {
         let current = DiscoveredDevice(id: "x", name: "Phone", rssi: -40)
         XCTAssertEqual(devicesIncludingTrusted([current], settings: .default), [current])
     }
+
+    func testMenuRowsEmptyWithoutDevices() {
+        XCTAssertEqual(deviceMenuRows([], settings: .default), [])
+    }
+
+    func testMenuRowsMapsTitleAndId() {
+        let device = DiscoveredDevice(id: "watch", name: "Anna Watch", rssi: -62)
+        let rows = deviceMenuRows([device], settings: .default)
+        XCTAssertEqual(rows, [DeviceMenuRow(id: "watch", title: "Anna Watch (-62 dBm)")])
+    }
+
+    func testMenuRowsIncludesTrustedPlaceholder() {
+        let settings = settingsWithDevice(.default, deviceId: "watch", deviceName: "Anna Watch")
+        let rows = deviceMenuRows([], settings: settings)
+        XCTAssertEqual(rows, [DeviceMenuRow(id: "watch", title: "Anna Watch (not in range)")])
+    }
+
+    func testMenuRowsKeepsDuplicateTitles() {
+        let a = DiscoveredDevice(id: "a", name: "Watch", rssi: -50)
+        let b = DiscoveredDevice(id: "b", name: "Watch", rssi: -50)
+        let rows = deviceMenuRows([a, b], settings: .default)
+        XCTAssertEqual(rows.count, 2)
+        XCTAssertEqual(rows[0].id, "a")
+        XCTAssertEqual(rows[1].id, "b")
+    }
 }

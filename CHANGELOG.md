@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.5 — 2026-08-31
+
+- WalkAway stays in the menu bar after launch. Bluetooth discovery no longer crashes the app while Preferences is still closed.
+
 ## 0.1.4 — 2026-08-31
 
 - Preferences and About open on the screen under the pointer. The previous builds could put the window on a display that is not visible.

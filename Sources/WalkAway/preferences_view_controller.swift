@@ -36,7 +36,7 @@ final class PreferencesViewController: NSViewController {
     }
 
     func reloadFromHost() {
-        guard let settings = host?.readSettings() else { return }
+        guard isViewLoaded, let settings = host?.readSettings() else { return }
         isReloading = true
         applySettingsToControls(settings)
         reloadDevicePopup(settings, host?.readDevices() ?? [])
@@ -86,11 +86,16 @@ private extension PreferencesViewController {
     }
 
     func reloadDevicePopup(_ settings: WalkAwaySettings, _ devices: [DiscoveredDevice]) {
-        devicePopup.removeAllItems()
-        let listed = devicesIncludingTrusted(devices, settings: settings)
-        listed.forEach { devicePopup.addItem(withTitle: deviceMenuTitle($0)) }
-        listed.enumerated().forEach { devicePopup.item(at: $0.offset)?.representedObject = $0.element.id }
+        guard let menu = devicePopup.menu else { return }
+        menu.removeAllItems()
+        deviceMenuRows(devices, settings: settings).forEach { addDeviceMenuRow(menu, $0) }
         selectTrustedDevice(settings.trustedDeviceId)
+    }
+
+    func addDeviceMenuRow(_ menu: NSMenu, _ row: DeviceMenuRow) {
+        let item = NSMenuItem(title: row.title, action: nil, keyEquivalent: "")
+        item.representedObject = row.id
+        menu.addItem(item)
     }
 
     func selectTrustedDevice(_ id: String?) {
