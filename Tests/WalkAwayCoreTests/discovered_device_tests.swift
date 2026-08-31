@@ -65,4 +65,36 @@ final class DiscoveredDeviceTests: XCTestCase {
         XCTAssertEqual(rows[0].id, "a")
         XCTAssertEqual(rows[1].id, "b")
     }
+
+    func testSortsByNameNotRssi() {
+        let weak = DiscoveredDevice(id: "a", name: "Alpha", rssi: -90)
+        let strong = DiscoveredDevice(id: "b", name: "Beta", rssi: -40)
+        XCTAssertEqual(sortedDevicesForMenu([strong, weak]).map(\.id), ["a", "b"])
+    }
+
+    func testRssiChangeDoesNotReorder() {
+        let first = sortedDevicesForMenu([
+            DiscoveredDevice(id: "a", name: "Watch", rssi: -40),
+            DiscoveredDevice(id: "b", name: "Phone", rssi: -90)
+        ]).map(\.id)
+        let second = sortedDevicesForMenu([
+            DiscoveredDevice(id: "a", name: "Watch", rssi: -90),
+            DiscoveredDevice(id: "b", name: "Phone", rssi: -40)
+        ]).map(\.id)
+        XCTAssertEqual(first, second)
+    }
+
+    func testSortsByIdWhenNamesMatch() {
+        let late = DiscoveredDevice(id: "z", name: "Watch", rssi: -40)
+        let early = DiscoveredDevice(id: "a", name: "Watch", rssi: -90)
+        XCTAssertEqual(sortedDevicesForMenu([late, early]).map(\.id), ["a", "z"])
+    }
+
+    func testDoesNotReloadWhileMenuOpen() {
+        XCTAssertFalse(shouldReloadDeviceMenu(isOpen: true))
+    }
+
+    func testReloadsWhenMenuClosed() {
+        XCTAssertTrue(shouldReloadDeviceMenu(isOpen: false))
+    }
 }

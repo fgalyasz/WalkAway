@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.7 — 2026-08-31
+
+- The trusted-device list keeps a stable order and does not rebuild while it is open, so a click selects the row you aimed at.
+
 ## 0.1.6 — 2026-08-31
 
 - Preferences… opens Preferences, and About WalkAway opens About, on that click. Earlier builds could open the previous menu item’s window.

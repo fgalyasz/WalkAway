@@ -26,7 +26,15 @@ public func deviceMenuRows(
     _ devices: [DiscoveredDevice],
     settings: WalkAwaySettings
 ) -> [DeviceMenuRow] {
-    devicesIncludingTrusted(devices, settings: settings).map(rowForDevice)
+    sortedDevicesForMenu(devicesIncludingTrusted(devices, settings: settings)).map(rowForDevice)
+}
+
+public func sortedDevicesForMenu(_ devices: [DiscoveredDevice]) -> [DiscoveredDevice] {
+    devices.sorted(by: deviceMenuOrder)
+}
+
+public func shouldReloadDeviceMenu(isOpen: Bool) -> Bool {
+    isOpen == false
 }
 
 public func devicesIncludingTrusted(
@@ -40,6 +48,12 @@ public func devicesIncludingTrusted(
 
 func rowForDevice(_ device: DiscoveredDevice) -> DeviceMenuRow {
     DeviceMenuRow(id: device.id, title: deviceMenuTitle(device))
+}
+
+func deviceMenuOrder(_ lhs: DiscoveredDevice, _ rhs: DiscoveredDevice) -> Bool {
+    let names = lhs.name.localizedStandardCompare(rhs.name)
+    if names != .orderedSame { return names == .orderedAscending }
+    return lhs.id < rhs.id
 }
 
 func placeholderDevice(id: String, name: String?) -> DiscoveredDevice {

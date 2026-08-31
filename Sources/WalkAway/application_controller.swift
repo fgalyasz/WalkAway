@@ -74,7 +74,7 @@ final class ApplicationController: NSObject, StatusItemActions, PreferencesHost,
 
     func bleMonitorDidUpdate(_ monitor: BlePresenceMonitor) {
         refreshChrome()
-        preferences?.preferencesViewController.reloadFromHost()
+        preferences?.preferencesViewController.reloadDevicesFromHost()
     }
 }
 

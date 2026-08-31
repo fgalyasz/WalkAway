@@ -16,6 +16,7 @@ final class PreferencesViewController: NSViewController {
     let launchHint = NSTextField(wrappingLabelWithString: "")
     let privacyHint = NSTextField(wrappingLabelWithString: "")
     var isReloading = false
+    var isDeviceMenuOpen = false
 
     init(host: PreferencesHost) {
         self.host = host
@@ -42,6 +43,14 @@ final class PreferencesViewController: NSViewController {
         reloadDevicePopup(settings, host?.readDevices() ?? [])
         isReloading = false
     }
+
+    func reloadDevicesFromHost() {
+        guard isViewLoaded, shouldReloadDeviceMenu(isOpen: isDeviceMenuOpen) else { return }
+        guard let settings = host?.readSettings() else { return }
+        isReloading = true
+        reloadDevicePopup(settings, host?.readDevices() ?? [])
+        isReloading = false
+    }
 }
 
 private extension PreferencesViewController {
@@ -54,6 +63,7 @@ private extension PreferencesViewController {
             "The first lock asks permission to control System Events. WalkAway never stores your password."
         wireActions()
         styleHints()
+        observeDeviceMenu()
     }
 
     func wireActions() {
@@ -86,10 +96,25 @@ private extension PreferencesViewController {
     }
 
     func reloadDevicePopup(_ settings: WalkAwaySettings, _ devices: [DiscoveredDevice]) {
-        guard let menu = devicePopup.menu else { return }
+        guard shouldReloadDeviceMenu(isOpen: isDeviceMenuOpen), let menu = devicePopup.menu else { return }
         menu.removeAllItems()
         deviceMenuRows(devices, settings: settings).forEach { addDeviceMenuRow(menu, $0) }
         selectTrustedDevice(settings.trustedDeviceId)
+    }
+
+    func observeDeviceMenu() {
+        let center = NotificationCenter.default
+        center.addObserver(self, selector: #selector(deviceMenuBeganTracking), name: NSMenu.didBeginTrackingNotification, object: devicePopup.menu)
+        center.addObserver(self, selector: #selector(deviceMenuEndedTracking), name: NSMenu.didEndTrackingNotification, object: devicePopup.menu)
+    }
+
+    @objc func deviceMenuBeganTracking() {
+        isDeviceMenuOpen = true
+    }
+
+    @objc func deviceMenuEndedTracking() {
+        isDeviceMenuOpen = false
+        reloadDevicesFromHost()
     }
 
     func addDeviceMenuRow(_ menu: NSMenu, _ row: DeviceMenuRow) {

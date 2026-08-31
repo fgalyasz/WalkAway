@@ -36,7 +36,6 @@ final class BlePresenceMonitor: NSObject, CBCentralManagerDelegate {
 
     func devices(now: Date) -> [DiscoveredDevice] {
         seen.compactMap { pair in freshDevice(id: pair.key, advertisement: pair.value, now: now) }
-            .sorted { ($0.rssi ?? -200) > ($1.rssi ?? -200) }
     }
 
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
