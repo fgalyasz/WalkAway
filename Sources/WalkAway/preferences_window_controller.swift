@@ -20,24 +20,18 @@ final class PreferencesWindowController: NSWindowController, NSWindowDelegate {
     required init?(coder: NSCoder) { nil }
 
     func show() {
-        PanelActivation.begin()
+        _ = preferencesViewController.view
         preferencesViewController.reloadFromHost()
-        perform(#selector(presentWindow), with: nil, afterDelay: 0)
-    }
-
-    @objc func presentWindow() {
         guard let window else { return }
-        window.center()
-        window.makeKeyAndOrderFront(nil)
-        NSApp.activate(ignoringOtherApps: true)
+        PanelActivation.shared.show(window)
     }
 
     func windowWillClose(_ notification: Notification) {
-        perform(#selector(endPanelIfNeeded), with: nil, afterDelay: 0)
+        perform(#selector(endPanelIfNeeded), with: nil, afterDelay: 0.1)
     }
 
     @objc func endPanelIfNeeded() {
-        PanelActivation.endIfNoKeyWindow()
+        PanelActivation.shared.endIfNoKeyWindow()
     }
 }
 

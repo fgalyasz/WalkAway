@@ -1,13 +1,31 @@
 import AppKit
 import WalkAwayCore
 
-enum PanelActivation {
-    static func begin() {
+final class PanelActivation: NSObject {
+    static let shared = PanelActivation()
+    private var pending: NSWindow?
+
+    func show(_ window: NSWindow) {
+        pending = window
         NSApp.setActivationPolicy(.regular)
-        NSApp.activate(ignoringOtherApps: true)
+        NSObject.cancelPreviousPerformRequests(withTarget: self)
+        perform(#selector(orderPendingFront), with: nil, afterDelay: 0.25)
     }
 
-    static func endIfNoKeyWindow() {
+    @objc func orderPendingFront() {
+        guard let window = pending else { return }
+        prepare(window)
+        NSApp.activate(ignoringOtherApps: true)
+        window.orderFrontRegardless()
+        window.makeKeyAndOrderFront(nil)
+    }
+
+    func prepare(_ window: NSWindow) {
+        window.collectionBehavior.insert(.moveToActiveSpace)
+        window.center()
+    }
+
+    func endIfNoKeyWindow() {
         let count = visibleKeyableWindowCount()
         if PanelActivationPolicy.shouldUseRegularPolicy(visibleKeyableWindowCount: count) {
             return
@@ -15,7 +33,11 @@ enum PanelActivation {
         NSApp.setActivationPolicy(.accessory)
     }
 
-    static func visibleKeyableWindowCount() -> Int {
-        NSApp.windows.filter(\.isVisible).filter(\.canBecomeKey).count
+    func visibleKeyableWindowCount() -> Int {
+        NSApp.windows.filter(isNormalKeyablePanel).count
+    }
+
+    func isNormalKeyablePanel(_ window: NSWindow) -> Bool {
+        window.isVisible && window.canBecomeKey && window.level == .normal
     }
 }

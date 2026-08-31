@@ -7,7 +7,7 @@ final class AboutViewController: NSViewController {
     private let copyrightLabel = NSTextField(labelWithString: "© 2026 TenPrint Software")
 
     override func loadView() {
-        view = NSView()
+        view = NSView(frame: NSRect(x: 0, y: 0, width: 420, height: 220))
     }
 
     override func viewDidLoad() {

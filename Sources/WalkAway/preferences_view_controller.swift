@@ -25,7 +25,7 @@ final class PreferencesViewController: NSViewController {
     required init?(coder: NSCoder) { nil }
 
     override func loadView() {
-        view = NSView()
+        view = NSView(frame: NSRect(x: 0, y: 0, width: 480, height: 430))
     }
 
     override func viewDidLoad() {

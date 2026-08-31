@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3 — 2026-08-31
+
+- Preferences… and About WalkAway now come to the front: wait for regular activation, then order the window front regardless of the status menu.
+
 ## 0.1.2 — 2026-08-31
 
 - Preferences… and About WalkAway open a visible window from the menu bar (accessory apps need a brief regular activation).
