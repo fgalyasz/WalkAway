@@ -50,7 +50,7 @@ A failed background check does not lock, disarm, or quit.
 
 #### FR-4: Check for Updates menu
 
-The status menu has Check for Updates…. It runs the same updater. Auto-install is off; the user confirms.
+The status menu has Check for Updates…. It runs the same updater. Confirm-then-install is the default until [Auto-install updates](../prd-WalkAway-auto-install-updates/prd.md); when that switch is on, there is no Install click.
 
 **Consequences:**
 - Menu item is visible in the .app and in `swift run`.
@@ -69,7 +69,7 @@ The status menu has Check for Updates…. It runs the same updater. Auto-install
 ## 4. Non-goals
 
 - Apple Developer ID notarization.
-- Silent auto-install (`SUAutomaticallyUpdate` stays false).
+- Silent relaunch with no Sparkle UI. Auto-install with a user toggle is [Auto-install updates](../prd-WalkAway-auto-install-updates/prd.md) (supersedes the earlier “`SUAutomaticallyUpdate` stays false” non-goal).
 - A dedicated walkaway.com domain.
 - Updating a `swift run` binary.
 

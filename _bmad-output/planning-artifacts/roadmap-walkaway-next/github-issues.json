@@ -1,0 +1,200 @@
+{
+  "proximity-tuner": {
+    "epic": 23,
+    "url": "https://github.com/fgalyasz/WalkAway/issues/23",
+    "stories": [
+      {
+        "n": 24,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/24",
+        "title": "[STORY] Core lock/return hysteresis",
+        "traces": "FR-2, FR-4"
+      },
+      {
+        "n": 25,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/25",
+        "title": "[STORY] Live meter and capture in Preferences",
+        "traces": "FR-1, FR-3"
+      },
+      {
+        "n": 26,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/26",
+        "title": "[TEST] Core coverage",
+        "traces": "FR-2, FR-4"
+      }
+    ]
+  },
+  "menu-presence": {
+    "epic": 27,
+    "url": "https://github.com/fgalyasz/WalkAway/issues/27",
+    "stories": [
+      {
+        "n": 28,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/28",
+        "title": "[STORY] Menu and status item presence",
+        "traces": "FR-1, FR-2, FR-3"
+      },
+      {
+        "n": 29,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/29",
+        "title": "[TEST] Core menu state",
+        "traces": "FR-1, FR-3"
+      }
+    ]
+  },
+  "timed-pause": {
+    "epic": 30,
+    "url": "https://github.com/fgalyasz/WalkAway/issues/30",
+    "stories": [
+      {
+        "n": 31,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/31",
+        "title": "[STORY] Core pause policy",
+        "traces": "FR-1, FR-3, FR-5"
+      },
+      {
+        "n": 32,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/32",
+        "title": "[STORY] Pause menu and until-clock",
+        "traces": "FR-1, FR-2, FR-4"
+      },
+      {
+        "n": 33,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/33",
+        "title": "[TEST] Core coverage",
+        "traces": "FR-1, FR-3, FR-5"
+      }
+    ]
+  },
+  "first-run": {
+    "epic": 34,
+    "url": "https://github.com/fgalyasz/WalkAway/issues/34",
+    "stories": [
+      {
+        "n": 35,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/35",
+        "title": "[STORY] First-run panel",
+        "traces": "FR-1, FR-2, FR-3, FR-4"
+      },
+      {
+        "n": 36,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/36",
+        "title": "[TEST] First-run completed flag",
+        "traces": "FR-1"
+      }
+    ]
+  },
+  "pre-lock-warning": {
+    "epic": 37,
+    "url": "https://github.com/fgalyasz/WalkAway/issues/37",
+    "stories": [
+      {
+        "n": 38,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/38",
+        "title": "[STORY] Core warning window",
+        "traces": "FR-1"
+      },
+      {
+        "n": 39,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/39",
+        "title": "[STORY] Status item pulse and optional sound",
+        "traces": "FR-2, FR-3, FR-4"
+      },
+      {
+        "n": 40,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/40",
+        "title": "[TEST] Core coverage",
+        "traces": "FR-1"
+      }
+    ]
+  },
+  "second-device": {
+    "epic": 41,
+    "url": "https://github.com/fgalyasz/WalkAway/issues/41",
+    "stories": [
+      {
+        "n": 42,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/42",
+        "title": "[STORY] Core OR presence",
+        "traces": "FR-2, FR-3"
+      },
+      {
+        "n": 43,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/43",
+        "title": "[STORY] Two slots in Preferences",
+        "traces": "FR-1, FR-4"
+      },
+      {
+        "n": 44,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/44",
+        "title": "[TEST] Core coverage",
+        "traces": "FR-2, FR-3"
+      }
+    ]
+  },
+  "lock-log": {
+    "epic": 45,
+    "url": "https://github.com/fgalyasz/WalkAway/issues/45",
+    "stories": [
+      {
+        "n": 46,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/46",
+        "title": "[STORY] Core ring buffer",
+        "traces": "FR-1, FR-2"
+      },
+      {
+        "n": 47,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/47",
+        "title": "[STORY] Preferences list and copy",
+        "traces": "FR-3, FR-4"
+      },
+      {
+        "n": 48,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/48",
+        "title": "[TEST] Core coverage",
+        "traces": "FR-1, FR-2"
+      }
+    ]
+  },
+  "trusted-wifi": {
+    "epic": 49,
+    "url": "https://github.com/fgalyasz/WalkAway/issues/49",
+    "stories": [
+      {
+        "n": 50,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/50",
+        "title": "[STORY] Core SSID pause policy",
+        "traces": "FR-2"
+      },
+      {
+        "n": 51,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/51",
+        "title": "[STORY] SSID list in Preferences",
+        "traces": "FR-1, FR-3, FR-4"
+      },
+      {
+        "n": 52,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/52",
+        "title": "[TEST] Core coverage",
+        "traces": "FR-2"
+      }
+    ]
+  },
+  "hotkeys": {
+    "epic": 53,
+    "url": "https://github.com/fgalyasz/WalkAway/issues/53",
+    "stories": [
+      {
+        "n": 54,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/54",
+        "title": "[STORY] Record and register four shortcuts",
+        "traces": "FR-1, FR-2, FR-3, FR-4"
+      },
+      {
+        "n": 55,
+        "url": "https://github.com/fgalyasz/WalkAway/issues/55",
+        "title": "[TEST] Shortcut settings round-trip",
+        "traces": "FR-1, FR-2"
+      }
+    ]
+  }
+}
